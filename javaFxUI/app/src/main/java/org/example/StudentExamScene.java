@@ -1,3 +1,5 @@
+package org.example;
+
 import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -17,10 +19,14 @@ import com.google.gson.JsonParser;
 
 public class StudentExamScene extends Application {
     private Stage primaryStage;
+    private String name;
+    private String role;
 
     @Override
     public void start(Stage primaryStage) {
         this.primaryStage = primaryStage;
+        this.name = name;
+        this.role = role;
         primaryStage.setTitle("Available Exams");
         showAvailableExams();
     }
@@ -41,7 +47,7 @@ public class StudentExamScene extends Application {
             for (int i = 0; i < exams.size(); i++) {
                 JsonObject exam = exams.get(i).getAsJsonObject();
                 Button examButton = new Button(exam.get("examName").getAsString());
-                examButton.setOnAction(e -> takeExam(exam.get("id").getAsLong()));
+                examButton.setOnAction(e -> takeExam(primaryStage, exam.get("id").getAsLong(), name, role));
                 vbox.getChildren().add(examButton);
             }
         }
@@ -70,9 +76,9 @@ public class StudentExamScene extends Application {
         return new JsonArray();
     }
 
-    private void takeExam(Long examId) {
+    private void takeExam(Stage primaryStage, long examId, String name, String role) {
         System.out.println("Taking Exam ID: " + examId);
-        ExamScene examScene = new ExamScene(primaryStage, examId);
+        ExamScene examScene = new ExamScene(primaryStage, examId, name, role);
         primaryStage.setScene(examScene.getScene());
     }
 

@@ -32,6 +32,13 @@ public class ExamController {
         return questionRepository.save(question);
     }
 
+     // Get all questions for a specific exam
+    @GetMapping("/{examId}/questions")
+    public List<Question> getQuestionsForExam(@PathVariable Long examId) {
+        Exam exam = examRepository.findById(examId).orElseThrow(() -> new RuntimeException("Exam not found"));
+        return questionRepository.findByExam(exam);
+    }
+
     // Get all exams for a student
     @GetMapping("/")
     public List<Exam> getAllExams() {

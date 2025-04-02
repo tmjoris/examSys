@@ -147,8 +147,13 @@ public class Dashboard extends Application {
     }
 
      private void loadMakeExamScene(Stage primaryStage, String name, String role) {
-        MakeExamScene makeExamScene = new MakeExamScene(primaryStage, name, role);
-        primaryStage.setScene(makeExamScene.getScene());
+        Platform.runLater(() -> {
+            try {
+                new MakeExamScene(primaryStage, name, role).start(primaryStage);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
     }
 
     public static void main(String[] args) {
