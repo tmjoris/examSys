@@ -1,0 +1,59 @@
+plugins {
+    id 'application'
+    id 'org.openjfx.javafxplugin' version '0.1.0' 
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation libs.junit.jupiter
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    implementation libs.guava
+    implementation 'org.openjfx:javafx-controls:21'
+    implementation 'org.openjfx:javafx-fxml:21'
+    implementation 'org.openjfx:javafx-graphics:21'
+    implementation 'com.google.code.gson:gson:2.10.1'
+    implementation 'org.slf4j:slf4j-api:2.0.7'
+    implementation 'org.slf4j:slf4j-simple:2.0.7'
+
+    // Platform specific dependencies
+    implementation 'org.openjfx:javafx-graphics:21:win'
+    implementation 'org.openjfx:javafx-graphics:21:linux'
+    implementation 'org.openjfx:javafx-graphics:21:mac'
+    implementation 'org.openjfx:javafx-controls:21:win'
+    implementation 'org.openjfx:javafx-controls:21:linux'
+    implementation 'org.openjfx:javafx-controls:21:mac'
+    implementation 'org.openjfx:javafx-fxml:21:win'
+    implementation 'org.openjfx:javafx-fxml:21:linux'
+    implementation 'org.openjfx:javafx-fxml:21:mac'
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
+
+application {
+    mainClass = 'org.example.Launcher' // Set Launcher as the main class
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
+
+javafx {
+    version = "21"
+    modules = [ 'javafx.controls', 'javafx.fxml', 'javafx.graphics' ]
+}
+
+jar {
+    manifest {
+        attributes 'Main-Class': 'org.example.Launcher'
+    }
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}
