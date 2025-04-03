@@ -62,7 +62,7 @@ public class StudentExamScene extends Application {
 
     private JsonArray fetchExams() {
         try {
-            URL url = new URL("http://localhost:8080/api/exams");
+            URL url = new URL("http://localhost:8080/api/exams/");
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("GET");
 
