@@ -22,11 +22,14 @@ public class StudentExamScene extends Application {
     private String name;
     private String role;
 
-    @Override
-    public void start(Stage primaryStage) {
+    public StudentExamScene(Stage primaryStage, String name, String role){
         this.primaryStage = primaryStage;
         this.name = name;
         this.role = role;
+    }
+
+    @Override
+    public void start(Stage primaryStage) {
         primaryStage.setTitle("Available Exams");
         showAvailableExams();
     }

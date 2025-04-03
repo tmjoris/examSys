@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gson.JsonObject;
+import com.google.gson.JsonArray;
 
 public class AddQuestionScene {
     private Stage primaryStage;
@@ -24,7 +25,7 @@ public class AddQuestionScene {
     private String role;
     private List<QuestionData> questions = new ArrayList<>();
     private int editingIndex = -1;
-    private Long editingQuestionId = null; // Store the questionId being edited
+    private Long editingQuestionId = null;
 
     // Instance variables
     private TextField questionField;
@@ -115,7 +116,13 @@ public class AddQuestionScene {
 
             JsonObject jsonObject = new JsonObject();
             jsonObject.addProperty("questionText", question);
-            jsonObject.addProperty("options", "[" + "\"" + optionA + "\"" + "," + "\"" + optionB + "\"" + "," + "\"" + optionC + "\"" + "," + "\"" + optionD + "\"" + "]");
+            JsonArray optionsArray = new JsonArray();
+            optionsArray.add(optionA);
+            optionsArray.add(optionB);
+            optionsArray.add(optionC);
+            optionsArray.add(optionD);
+
+            jsonObject.add("options", optionsArray);
             jsonObject.addProperty("correctAnswer", correctAnswer);
 
             String jsonInput = jsonObject.toString();
@@ -169,7 +176,13 @@ public class AddQuestionScene {
 
             JsonObject jsonObject = new JsonObject();
             jsonObject.addProperty("questionText", question);
-            jsonObject.addProperty("options", "[" + "\"" + optionA + "\"" + "," + "\"" + optionB + "\"" + "," + "\"" + optionC + "\"" + "," + "\"" + optionD + "\"" + "]");
+            JsonArray optionsArray = new JsonArray();
+            optionsArray.add(optionA);
+            optionsArray.add(optionB);
+            optionsArray.add(optionC);
+            optionsArray.add(optionD);
+
+            jsonObject.add("options", optionsArray);
             jsonObject.addProperty("correctAnswer", correctAnswer);
 
             String jsonInput = jsonObject.toString();

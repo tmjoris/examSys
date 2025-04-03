@@ -2,6 +2,7 @@ package com.examSys.examApp.models;
 
 import jakarta.persistence.*;
 import java.util.List;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class Exam {
@@ -14,6 +15,8 @@ public class Exam {
     private String examName;
     
     @OneToMany(mappedBy = "exam", cascade = CascadeType.ALL)
+    
+    @JsonIgnore
     private List<Question> questions;
 
     // Getters and setters

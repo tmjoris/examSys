@@ -111,7 +111,9 @@ public class Dashboard extends Application {
     private Button[] getRoleButtons() {
         switch (userRole) {
             case "Student":
-                return new Button[]{createSidebarButton("Exams"), createSidebarButton("Grades")};
+                Button studentExamButton = createSidebarButton("Exams");
+                studentExamButton.setOnAction(e -> loadStudentExamScene(primaryStage, this.userName, this.userRole));
+                return new Button[]{studentExamButton, createSidebarButton("Grades")};
             case "Instructor":
                 Button makeExamButton = createSidebarButton("Make Exam");
                 makeExamButton.setOnAction(e -> loadMakeExamScene(primaryStage, this.userName, this.userRole)); 
@@ -150,6 +152,16 @@ public class Dashboard extends Application {
         Platform.runLater(() -> {
             try {
                 new MakeExamScene(primaryStage, name, role).start(primaryStage);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+    }
+
+    private void loadStudentExamScene(Stage primaryStage, String name, String role) {
+        Platform.runLater(() -> {
+            try {
+                new StudentExamScene(primaryStage, name, role).start(primaryStage);
             } catch (Exception e) {
                 e.printStackTrace();
             }
