@@ -20,7 +20,7 @@ public class User {
     private String name;
 
     @Column(nullable = false)
-    private String role; // "Student", "Instructor", or "Admin"
+    private String role;
 
     // Getters and Setters
     public Long getId() { return id; }

@@ -16,16 +16,20 @@ import java.util.Scanner;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import javafx.geometry.Rectangle2D;
+import javafx.stage.Screen;
 
 public class StudentExamScene extends Application {
     private Stage primaryStage;
     private String name;
+    private String email;
     private String role;
 
-    public StudentExamScene(Stage primaryStage, String name, String role){
+    public StudentExamScene(Stage primaryStage, String name, String role, String email){
         this.primaryStage = primaryStage;
         this.name = name;
         this.role = role;
+        this.email = email;
     }
 
     @Override
@@ -50,12 +54,18 @@ public class StudentExamScene extends Application {
             for (int i = 0; i < exams.size(); i++) {
                 JsonObject exam = exams.get(i).getAsJsonObject();
                 Button examButton = new Button(exam.get("examName").getAsString());
-                examButton.setOnAction(e -> takeExam(primaryStage, exam.get("id").getAsLong(), name, role));
+                String examName = exam.get("examName").getAsString();
+                long examId = exam.get("id").getAsLong();
+                
+                examButton.setOnAction(e -> takeExam(primaryStage, examId, name, role, examName, email));
                 vbox.getChildren().add(examButton);
             }
         }
 
-        Scene scene = new Scene(vbox, 400, 400);
+        Rectangle2D screenBounds = Screen.getPrimary().getBounds();
+        Scene scene = new Scene(vbox, screenBounds.getWidth(), screenBounds.getHeight());
+        primaryStage.setScene(scene);
+        primaryStage.setMaximized(true);
         primaryStage.setScene(scene);
         primaryStage.show();
     }
@@ -79,9 +89,9 @@ public class StudentExamScene extends Application {
         return new JsonArray();
     }
 
-    private void takeExam(Stage primaryStage, long examId, String name, String role) {
+    private void takeExam(Stage primaryStage, long examId, String name, String role, String examName, String email) {
         System.out.println("Taking Exam ID: " + examId);
-        ExamScene examScene = new ExamScene(primaryStage, examId, name, role);
+        ExamScene examScene = new ExamScene(primaryStage, examId, name, role, examName, email);
         primaryStage.setScene(examScene.getScene());
     }
 

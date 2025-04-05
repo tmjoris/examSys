@@ -11,6 +11,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -21,6 +22,7 @@ import javafx.concurrent.Task;
 import javafx.application.Platform;
 import javafx.stage.Screen; 
 import javafx.geometry.Rectangle2D;
+import javafx.scene.input.KeyCombination;
 
 public class Login extends Application {
 
@@ -106,7 +108,6 @@ public class Login extends Application {
         Rectangle2D screenBounds = Screen.getPrimary().getBounds();
         Scene scene = new Scene(vbox, screenBounds.getWidth(), screenBounds.getHeight());
         primaryStage.setScene(scene);
-        primaryStage.setMaximized(true);
     }
 
     private void performLogin(String email, String password, Label messageLabel) {
@@ -139,7 +140,7 @@ public class Login extends Application {
                 // Extract name and role from response
                 String name = responseObject.get("name").getAsString();
                 String role = responseObject.get("role").getAsString();
-                Platform.runLater(() -> loadDashboardScene(name, role));
+                Platform.runLater(() -> loadDashboardScene(name, role, email));
             } else {
                 Platform.runLater(() -> messageLabel.setText("Invalid credentials."));
             }
@@ -151,11 +152,12 @@ public class Login extends Application {
 
         new Thread(loginTask).start();
     }
-
-    private void loadDashboardScene(String name, String role) {
+    
+    
+    private void loadDashboardScene(String name, String role, String email) {
         Platform.runLater(() -> {
             try {
-                new Dashboard(primaryStage, name, role).start(primaryStage);
+                new Dashboard(primaryStage, name, role, email).start(primaryStage);
             } catch (Exception e) {
                 e.printStackTrace();
             }

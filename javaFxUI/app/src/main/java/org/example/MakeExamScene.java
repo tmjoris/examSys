@@ -9,6 +9,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.stage.Screen;
+import javafx.geometry.Rectangle2D;
 
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -24,11 +26,13 @@ public class MakeExamScene extends Application {
     private Stage primaryStage;
     private String name;
     private String role;
+    private String email;
 
-    public MakeExamScene(Stage primaryStage, String name, String role) {
+    public MakeExamScene(Stage primaryStage, String name, String role, String email) {
         this.primaryStage = primaryStage;
         this.name = name;
         this.role = role;
+        this.email = email;
     }
 
 
@@ -57,7 +61,8 @@ public class MakeExamScene extends Application {
 
         vbox.getChildren().addAll(courseLabel, courseField, examNameLabel, examNameField, submitButton);
 
-        Scene scene = new Scene(vbox, 400, 300);
+        Rectangle2D screenBounds = Screen.getPrimary().getBounds();
+        Scene scene = new Scene(vbox, screenBounds.getWidth(), screenBounds.getHeight());
         primaryStage.setScene(scene);
         primaryStage.show();
     }
@@ -88,7 +93,7 @@ public class MakeExamScene extends Application {
 
                     System.out.println("Exam Created Successfully! ID: " + examId);
 
-                    Platform.runLater(() -> loadAddQuestionScene(primaryStage, examId, name, role));
+                    Platform.runLater(() -> loadAddQuestionScene(primaryStage, examId, name, role, email));
             } else {
                 System.out.println("Failed to create exam: " + responseCode);
             }
@@ -99,8 +104,8 @@ public class MakeExamScene extends Application {
     }
 
 
-    private void loadAddQuestionScene(Stage primaryStage, long examId, String name, String role) {
-        AddQuestionScene addQuestionScene = new AddQuestionScene(primaryStage, examId, name, role);
+    private void loadAddQuestionScene(Stage primaryStage, long examId, String name, String role, String email) {
+        AddQuestionScene addQuestionScene = new AddQuestionScene(primaryStage, examId, name, role, email);
         primaryStage.setScene(addQuestionScene.getScene());
     }
 

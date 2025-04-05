@@ -6,6 +6,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.stage.Screen;
+import javafx.geometry.Rectangle2D;
 
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
@@ -23,6 +25,7 @@ public class AddQuestionScene {
     private Scene scene;
     private String name;
     private String role;
+    private String email;
     private List<QuestionData> questions = new ArrayList<>();
     private int editingIndex = -1;
     private Long editingQuestionId = null;
@@ -37,11 +40,12 @@ public class AddQuestionScene {
     private ListView<String> questionListView;
     private Button updateQuestionButton;
 
-    public AddQuestionScene(Stage primaryStage, long examId, String name, String role) {
+    public AddQuestionScene(Stage primaryStage, long examId, String name, String role, String email) {
         this.primaryStage = primaryStage;
         this.examId = examId;
         this.name = name;
         this.role = role;
+        this.email = email;
         initializeScene();
     }
 
@@ -86,7 +90,7 @@ public class AddQuestionScene {
         updateQuestionButton.setVisible(false);
 
         Button finishButton = new Button("Finish");
-        finishButton.setOnAction(e -> returnToDashboard(name, role));
+        finishButton.setOnAction(e -> returnToDashboard(name, role, email));
 
         questionListView = new ListView<>();
 
@@ -101,7 +105,8 @@ public class AddQuestionScene {
             questionListView, finishButton
         );
 
-        scene = new Scene(layout, 400, 600);
+        Rectangle2D screenBounds = Screen.getPrimary().getBounds();
+        scene = new Scene(layout, screenBounds.getWidth(), screenBounds.getHeight());
 
         updateQuestionListView();
     }
@@ -255,10 +260,10 @@ public class AddQuestionScene {
         correctAnswerBox.setValue(questionData.correctAnswer);
     }
 
-    private void returnToDashboard(String name, String role) {
+    private void returnToDashboard(String name, String role, String email) {
         Platform.runLater(() -> {
             try {
-                new Dashboard(primaryStage, name, role).start(primaryStage);
+                new Dashboard(primaryStage, name, role, email).start(primaryStage);
             } catch (Exception e) {
                 e.printStackTrace();
             }

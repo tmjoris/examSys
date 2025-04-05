@@ -1,9 +1,7 @@
 package com.examSys.examApp.controllers;
 
-import com.examSys.examApp.models.Exam;
-import com.examSys.examApp.models.Question;
-import com.examSys.examApp.repositories.ExamRepository;
-import com.examSys.examApp.repositories.QuestionRepository;
+import com.examSys.examApp.models.*;
+import com.examSys.examApp.repositories.*;
 import com.examSys.examApp.dto.QuestionDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -11,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/exams")
@@ -20,6 +19,8 @@ public class ExamController {
     private ExamRepository examRepository;
     @Autowired
     private QuestionRepository questionRepository;
+    @Autowired
+    private ScoreRepository scoreRepository;
 
     // Create a new exam
     @PostMapping("/create")
@@ -76,7 +77,23 @@ public class ExamController {
         Exam exam = examRepository.findById(examId).orElseThrow(() -> new RuntimeException("Exam not found"));
         return questionRepository.findByExam(exam);
     }
-
+    
+    @PostMapping("/{examId}/scores")
+    public ResponseEntity<Score> submitScore(@PathVariable Long examId, @RequestBody Map<String, Object> payload) {
+        Exam exam = examRepository.findById(examId).orElse(null);
+        if (exam == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        Score score = new Score();
+        score.setExam(exam);
+        score.setScore((int) payload.get("score"));
+        score.setStudentName((String) payload.get("studentName"));
+        score.setStudentEmail((String) payload.get("studentEmail"));
+        Score savedScore = scoreRepository.save(score);
+        return new ResponseEntity<>(savedScore, HttpStatus.CREATED);
+    }
+   
+    
     // Get all exams for a student
     @GetMapping("/")
     public List<Exam> getAllExams() {

@@ -28,7 +28,8 @@ public class LoginController {
                 return Map.of(
                     "success", true,
                     "name", user.getName(),
-                    "role", user.getRole()
+                    "role", user.getRole(),
+                    "email", email
                 );
             }
         }
